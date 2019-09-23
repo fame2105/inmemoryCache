@@ -61,6 +61,7 @@ public class DataLoader implements ApplicationRunner {
         System.out.println(cacheService.get(3l).getName());
         System.out.println(cacheService.get(4l).getName());
         employee4.setName("qweq");
+        cacheService.save(employee4.getId(), employee4);
         System.out.println(cacheService.get(4l).getName());
 
         cacheService.flushCache();
