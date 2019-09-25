@@ -9,5 +9,4 @@ public class InmemoryLrucacheApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InmemoryLrucacheApplication.class, args);
 	}
-
 }

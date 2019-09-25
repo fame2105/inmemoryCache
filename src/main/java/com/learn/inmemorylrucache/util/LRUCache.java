@@ -1,23 +1,36 @@
 package com.learn.inmemorylrucache.util;
 
 import com.learn.inmemorylrucache.exceptions.KeyNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class LRUCache {
 
-    private class DNode {
-        Long key;
+    private static LRUCache instance;
+
+    private LRUCache(){}
+
+    public static LRUCache getInstance(int cacheCapacity){
+        if(instance == null){
+            maxCapacity = cacheCapacity;
+            instance = new LRUCache(maxCapacity);
+        }
+        return instance;
+    }
+    private static class DNode {
+        String key;
         Object value;
         DNode prev;
         DNode next;
     }
 
-    private Map<Long, DNode> hashtable = new HashMap<Long, DNode>();
-    private DNode head, tail;
-    private int totalItemsInCache;
-    private int maxCapacity;
+    private static Map<String, DNode> hashtable = new HashMap<String, DNode>();
+    private static DNode head, tail;
+    private static int totalItemsInCache;
+    private static int maxCapacity;
 
     public LRUCache(int maxCapacity) {
 
@@ -39,7 +52,7 @@ public class LRUCache {
       Retrieve an item from the cache
       //get
     */
-    public Object get(Long key) throws KeyNotFoundException {
+    public Object get(String key) throws KeyNotFoundException {
 
         DNode node = hashtable.get(key);
         boolean itemFoundInCache = node != null;
@@ -54,8 +67,11 @@ public class LRUCache {
         return node.value;
     }
 
-    //add, update
-    public void put(Long key, Object value) {
+    /**
+     * @param key : to identify the object stored against this key
+     * @param value : the object to be stored in the cache against this key
+     */
+    public void put(String key, Object value) {
 
         DNode node = hashtable.get(key);
         boolean itemFoundInCache = node != null;
@@ -87,11 +103,36 @@ public class LRUCache {
 
     }
 
+    /**
+     * @param key : to identify the object stored against this key
+     */
+    public void remove(String key) {
+        DNode node = hashtable.get(key);
+        boolean itemFoundInCache = node != null;
+
+        if(itemFoundInCache){
+            removeNode(node);
+        }
+        hashtable.remove(key);
+        --totalItemsInCache;
+    }
+
+    /**
+     * Empties the current instance of cache
+     */
     public void flush(){
         totalItemsInCache = 0;
-        this.hashtable = new HashMap<>();
+        hashtable = new HashMap<>();
         head.next = tail;
         tail.prev = head;
+    }
+
+    public static int getTotalItemsInCache(){
+        return totalItemsInCache;
+    }
+
+    public static int getCacheSize(){
+        return maxCapacity;
     }
 
     /*
@@ -99,7 +140,7 @@ public class LRUCache {
       list as well as the hashtable. Hence it is evicted
       from the whole LRUCache structure
     */
-    private void removeLRUEntryFromStructure() {
+    private static void removeLRUEntryFromStructure() {
         DNode tail = popTail();
         hashtable.remove(tail.key);
         --totalItemsInCache;
@@ -109,7 +150,7 @@ public class LRUCache {
       Insertions to the doubly linked list will always
       be right after the dummy head
     */
-    private void addNode(DNode node){
+    private static void addNode(DNode node){
         node.prev = head;
         node.next = head.next;
 
@@ -121,7 +162,7 @@ public class LRUCache {
     /*
       Remove the given node from the doubly linked list
     */
-    private void removeNode(DNode node){
+    private static void removeNode(DNode node){
 
         // Grab reference to the prev and next of the node
         DNode savedPrev = node.prev;
@@ -134,7 +175,7 @@ public class LRUCache {
     /*
       Move a node to the head of the doubly linked lsit
     */
-    private void moveToHead(DNode node){
+    private static void moveToHead(DNode node){
         removeNode(node);
         addNode(node);
     }
@@ -142,7 +183,7 @@ public class LRUCache {
     /*
       Pop the last item from the structure
     */
-    private DNode popTail(){
+    private static DNode popTail(){
         DNode itemBeingRemoved = tail.prev;
         removeNode(itemBeingRemoved);
         return itemBeingRemoved;
