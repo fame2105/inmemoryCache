@@ -1,12 +1,15 @@
-package com.learn.inmemorylrucache.service;
+package com.learn.inmemorylrucache;
+
 
 import com.learn.inmemorylrucache.model.Employee;
+import com.learn.inmemorylrucache.service.AbstractMapService;
+import com.learn.inmemorylrucache.service.CrudService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class EmployeeService extends AbstractMapService<Employee, Long> implements CrudService<Employee, Long>{
+public class EmployeeService extends AbstractMapService<Employee, Long> implements CrudService<Employee, Long> {
     @Override
     public List<Employee> findAll() {
         return super.findAll();

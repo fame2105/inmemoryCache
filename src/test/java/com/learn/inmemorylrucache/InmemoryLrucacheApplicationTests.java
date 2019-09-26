@@ -2,7 +2,6 @@ package com.learn.inmemorylrucache;
 
 import com.learn.inmemorylrucache.exceptions.KeyNotFoundException;
 import com.learn.inmemorylrucache.model.Employee;
-import com.learn.inmemorylrucache.service.EmployeeService;
 import com.learn.inmemorylrucache.util.LRUCache;
 import org.junit.Test;
 import org.junit.runner.RunWith;

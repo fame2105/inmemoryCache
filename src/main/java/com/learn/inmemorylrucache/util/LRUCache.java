@@ -13,10 +13,15 @@ public class LRUCache {
 
     private LRUCache(){}
 
+    // Using Double checked locking mechanism to reduce overhead while creating Singleton instance keeping it Thread Safe.
     public static LRUCache getInstance(int cacheCapacity){
         if(instance == null){
-            maxCapacity = cacheCapacity;
-            instance = new LRUCache(maxCapacity);
+            synchronized(LRUCache.class){
+                if(instance == null){
+                    maxCapacity = cacheCapacity;
+                    instance = new LRUCache(maxCapacity);
+                }
+            }
         }
         return instance;
     }

@@ -1,17 +1,12 @@
 package com.learn.inmemorylrucache.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 @Entity
 @Table(name = "employee")
-public class Employee {
-
-    @Id
-    private Long id;
+public class Employee extends Base {
 
     @NotNull
     private String name;
@@ -21,14 +16,6 @@ public class Employee {
 
     @NotNull
     private String department;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -55,22 +42,8 @@ public class Employee {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", salary=" + salary +
                 ", department='" + department + '\'' +
